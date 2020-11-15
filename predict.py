@@ -39,7 +39,7 @@ import functions_predict
 parser = argparse.ArgumentParser(description = 'predict-file')
 
 parser.add_argument('path_to_image', default = 'paind-project/flowers/test/99/image_07871.jpg', nargs = '*', type = str)
-parser.add_argument('checkpoint', default = '/home/workspace/paind-project/checkpoint.pth', nargs = '*', type = str)
+parser.add_argument('checkpoint', default = '/home/workspace/ImageClassifier/checkpoint.pth', nargs = '*', type = str)
 parser.add_argument('--top_k', default = 5, dest = "top_k", type=int)
 parser.add_argument('--category_names', dest = "category_names", default = 'cat_to_name.json')
 parser.add_argument('--gpu', default = "gpu", dest = "gpu")
@@ -57,7 +57,7 @@ use = parser.gpu
 train_loader, validate_loader, test_loader, train_data = functions_train.load_data()
 # def load_data(data_dir = 'flowers'):
 
-functions_predict.load_checkpoint(path_to_checkpoint)
+model = functions_predict.load_checkpoint(path_to_checkpoint)
 # def load_checkpoint(path = 'checkpoint.pth'):
 
 
@@ -66,10 +66,12 @@ with open('cat_to_name.json', 'r') as f:
 
     # What about process_image?
 
-probabilities = functions_predict.predict(path_image, model, topk, use)
+probabilities = functions_predict.predict(path_to_image, model, topk, use)
 # def predict(path_to_image, model, topk = 5, use = 'gpu'):
 
-labels = [cat_to_name[str(index + 1)] for index in np.array(probabilities[1][0])]
+print(probabilities)
+
+labels = [cat_to_name[str(index + 1)] for index in probabilities[1][0]]
 probability = np.array(probabilities[0][0])
 
 

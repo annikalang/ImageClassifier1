@@ -53,6 +53,10 @@ def process_image(image):
     ''' Scales, crops, and normalizes a PIL image for a PyTorch model,
         returns an Numpy array
     '''
+    cropped_size = 224
+    resized_size = 255
+    means = [0.485, 0.456, 0.406]
+    stds = [0.229, 0.224, 0.225]
     
     # TODO: Process a PIL image for use in a PyTorch model
     image_transforms = transforms.Compose([transforms.Resize(resized_size),
@@ -83,8 +87,9 @@ def predict(path_to_image, model, topk = 5, use = 'gpu'):
         print("CPU")
     
     model.eval()
-    #image = Image.open(path_to_image)
-    image = process_image(path_to_image)
+    #print(path_to_image[0])
+    image_to_predict = Image.open(path_to_image[0])
+    image = process_image(image_to_predict)
     image = torch.from_numpy(np.array([image])).float()
     #image = Variable(image)
     
